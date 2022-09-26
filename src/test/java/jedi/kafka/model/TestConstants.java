@@ -16,7 +16,7 @@ public class TestConstants {
   public static final String FAILING_TOPIC = "test-failing";
   public static final String TEST = "test";
   public static final String RETRY = "retry";
-  public static final String TEST_KAFKA_CONFIG_FILENAME = "test-kafka-config.json";
+  public static final String TEST_KAFKA_CONFIG_FILENAME = "/test-kafka-config.json";
   public static final long RETRY_10L = 10L;
 
 }

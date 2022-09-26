@@ -3,6 +3,9 @@ package jedi.kafka.service;
 import static jedi.kafka.model.KafkaConstants.CONTEXT_SEPERATOR;
 import static jedi.kafka.model.KafkaConstants.UTF_8;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
@@ -12,12 +15,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import jedi.kafka.model.StepDetails;
-import lombok.extern.slf4j.Slf4j;
 import jedi.kafka.model.Errors;
 import jedi.kafka.model.KafkaRuntimeException;
 import jedi.kafka.model.KafkaServiceConfig;
 import jedi.kafka.model.Step;
+import jedi.kafka.model.StepDetails;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ReadConfigurationStep extends Step {
@@ -40,10 +43,25 @@ public class ReadConfigurationStep extends Step {
       log.error("Resource filename for kafka configuration can not be null");
       throw new KafkaRuntimeException(Errors.INVALID_CONFIGURATION_ERROR,"Resource filename for kafka configuration can not be null");
     }
+//    if(!fileName.startsWith(CONTEXT_SEPERATOR)) {
+//      fileName = CONTEXT_SEPERATOR+fileName;
+//    }
+    InputStream inputStream = null;
     if(!fileName.startsWith(CONTEXT_SEPERATOR)) {
-      fileName = CONTEXT_SEPERATOR+fileName;
+    final File initialFile = new File(fileName);
+    System.out.println("Figen");
+ ;
+	try {
+		inputStream = new FileInputStream(initialFile);
+	} catch (FileNotFoundException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+    } else {
+         inputStream = this.getClass().getResourceAsStream(fileName);
+
+    	
     }
-    InputStream inputStream = this.getClass().getResourceAsStream(fileName);
     try {
       if(Objects.isNull(inputStream)) {
         log.error("Can not read file {}",fileName);
